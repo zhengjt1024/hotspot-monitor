@@ -1,4 +1,4 @@
-"""Generate a hot topics report from the AI Hot Monitor API."""
+"""Generate a hot topics report from the Hotspot Monitor API."""
 import urllib.request
 import json
 import sys
@@ -16,7 +16,7 @@ def fetch(path):
 
 def main():
     print("=" * 60)
-    print("  AI Hot Monitor - Hot Topics Report")
+    print("  Hotspot Monitor - Hot Topics Report")
     print(f"  Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print("=" * 60)
 

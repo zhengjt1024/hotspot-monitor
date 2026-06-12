@@ -31,7 +31,7 @@ export async function analyzeContent(keyword, { title, snippet, source }) {
         'Authorization': 'Bearer ' + apiKey,
         'Content-Type': 'application/json',
         'HTTP-Referer': 'http://localhost:3001',
-        'X-Title': 'AI Host Monitor',
+        'X-Title': 'Hotspot Monitor',
       },
       timeout: 30000,
     });

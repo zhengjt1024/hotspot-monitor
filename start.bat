@@ -1,9 +1,9 @@
 @echo off
 chcp 65001 >nul
-title AI Hot Monitor
+title Hotspot Monitor
 echo.
 echo   ========================================
-echo     AI Hot Monitor - 智能热点监控系统
+echo     Hotspot Monitor - 智能热点监控系统
 echo   ========================================
 echo.
 
@@ -41,13 +41,13 @@ echo.
 
 :: === Start backend ===
 echo [1/2] Starting backend...
-start "AI-Hot-Monitor-Backend" /min cmd /c "cd /d "%~dp0backend" && npm run dev"
+start "Hotspot-Monitor-Backend" /min cmd /c "cd /d "%~dp0backend" && npm run dev"
 timeout /t 4 /nobreak >nul
 echo   Backend : http://localhost:3001
 
 :: === Start frontend ===
 echo [2/2] Starting frontend...
-start "AI-Hot-Monitor-Frontend" /min cmd /c "cd /d "%~dp0frontend" && npx vite --host"
+start "Hotspot-Monitor-Frontend" /min cmd /c "cd /d "%~dp0frontend" && npx vite --host"
 timeout /t 5 /nobreak >nul
 echo   Frontend: http://localhost:5173
 

@@ -1,4 +1,4 @@
-# AI Hot Monitor 🔥
+# Hotspot Monitor 🔥
 
 智能热点监控系统 --- 多源自动发现 AI/科技热点，AI 验证内容真实性，第一时间推送通知。
 
@@ -90,13 +90,13 @@ npm run dev
 
 `ash
 # 生成热点报告
-python .agents/skills/ai-hot-monitor/scripts/report.py
+python .agents/skills/hotspot-monitor/scripts/report.py
 
 # 清理旧数据
-python .agents/skills/ai-hot-monitor/scripts/cleanup.py --days 7
+python .agents/skills/hotspot-monitor/scripts/cleanup.py --days 7
 `
 
-Agent Skills 详情见 .agents/skills/ai-hot-monitor/SKILL.md
+Agent Skills 详情见 .agents/skills/hotspot-monitor/SKILL.md
 
 ## 常见问题
 
@@ -137,7 +137,7 @@ ai-host-monitor/
 |   |   |-- main.js             # Vue 入口
 |   |   |-- style.css           # 全局样式
 |-- .agents/                    # Agent Skills
-|   |-- skills/ai-hot-monitor/
+|   |-- skills/hotspot-monitor/
 |       |-- SKILL.md
 |       |-- scripts/
 |-- start.bat                   # 一键启动脚本 (Windows)

@@ -1,5 +1,5 @@
-﻿# AI Hot Monitor - 一键启动前后端
-Write-Host "=== AI Hot Monitor ===" -ForegroundColor Cyan
+﻿# Hotspot Monitor - 一键启动前后端
+Write-Host "=== Hotspot Monitor ===" -ForegroundColor Cyan
 Write-Host ""
 
 $root = Split-Path -Parent $MyInvocation.MyCommand.Path

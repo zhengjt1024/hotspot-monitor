@@ -1,5 +1,5 @@
 ---
-name: ai-hot-monitor
+name: hotspot-monitor
 description: >-
   AI-powered hot topic monitoring and alert system. Use when monitoring keywords, tracking AI/news trends,
   detecting fake content, or gathering real-time hot topics from web and Twitter. Provides REST API for
@@ -8,9 +8,9 @@ description: >-
   hot topic aggregation, content authenticity verification.
 ---
 
-# AI Hot Monitor Skill
+# Hotspot Monitor Skill
 
-Use this skill to delegate hot topic monitoring and content verification to the AI Hot Monitor backend.
+Use this skill to delegate hot topic monitoring and content verification to the Hotspot Monitor backend.
 The system aggregates content from multiple sources (Web search, Twitter/X), uses AI to verify authenticity,
 and sends notifications for high-relevance discoveries.
 

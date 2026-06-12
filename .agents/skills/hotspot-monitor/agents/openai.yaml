@@ -1,7 +1,7 @@
-display_name: AI Hot Monitor
+display_name: Hotspot Monitor
 short_description: AI-powered hot topic monitoring with web+Twitter aggregation and authenticity verification
 default_prompt: >-
-  Use the AI Hot Monitor API at http://localhost:3001 to manage keyword monitoring, discover hot topics,
+  Use the Hotspot Monitor API at http://localhost:3001 to manage keyword monitoring, discover hot topics,
   and check notifications. Add keywords with curl POST /api/keywords, trigger scans with
   curl POST /api/topics/trigger, and read verified topics with curl GET /api/topics?verified=1.
   Use report.py for summary reports and cleanup.py for maintenance.

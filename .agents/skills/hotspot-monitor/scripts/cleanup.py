@@ -1,4 +1,4 @@
-"""Clean up old topics and notifications from the AI Hot Monitor database."""
+"""Clean up old topics and notifications from the Hotspot Monitor database."""
 import sqlite3
 import argparse
 import os

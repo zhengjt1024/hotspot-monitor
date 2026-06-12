@@ -15,7 +15,7 @@
 
 | 层 | 技术 |
 |---|---|
-| 前端 | Vue 3 + Vite + Ant Design Vue 4 |
+| 前端 | Vue 3 + Vite + shadcn-vue (Radix Vue + Tailwind) |
 | 后端 | Node.js + Express |
 | 数据库 | SQLite (better-sqlite3) |
 | AI | OpenRouter (支持 GPT/Gemini/Claude 等) |
@@ -124,18 +124,21 @@ ai-host-monitor/
 |   |   |-- index.js            # 服务入口
 |   |-- .env                    # API Key 配置
 |   |-- data/                   # SQLite 数据库文件
-|-- frontend/                   # Vue 3 前端
+|-- frontend/                   # Vue 3 前端 (shadcn-vue)
 |   |-- src/
-|   |   |-- components/         # Vue 组件
-|   |   |   |-- Header.vue
+|   |   |-- components/
+|   |   |   |-- ui/             # shadcn-vue 基础组件 (Button/Card/Input/Badge)
+|   |   |   |-- Header.vue      # 顶部导航 + LIVE指示器
 |   |   |   |-- KeywordManager.vue
 |   |   |   |-- HotTopicsFeed.vue
 |   |   |   |-- NotificationPanel.vue
 |   |   |   |-- Settings.vue
-|   |   |-- lib/api.js          # API 封装
-|   |   |-- App.vue             # 主布局 + 暗色主题
+|   |   |-- lib/
+|   |   |   |-- api.js          # API 封装
+|   |   |   |-- utils.js        # cn() 工具函数
+|   |   |-- App.vue             # 主布局 + 粒子背景
 |   |   |-- main.js             # Vue 入口
-|   |   |-- style.css           # 全局样式
+|   |   |-- style.css           # shadcn 暗色主题 + Tailwind
 |-- .agents/                    # Agent Skills
 |   |-- skills/hotspot-monitor/
 |       |-- SKILL.md

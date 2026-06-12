@@ -1,49 +1,41 @@
 <template>
-  <a-config-provider :theme="themeConfig">
-    <div class="app-container">
-      <div class="glow-orb glow-orb-left"></div>
-      <div class="glow-orb glow-orb-right"></div>
+  <div class="min-h-screen bg-background relative isolation-auto">
+    <canvas ref="pc" id="particles-canvas"></canvas>
 
-      <Header
-        :stats="stats"
-        :notify-count="notifyCount"
-        :active-tab="activeTab"
-        @tab-change="onTabChange"
-        @refresh="refreshStats"
-        @trigger="handleTrigger"
-      />
+    <Header
+      :stats="stats" :notify-count="notifyCount" :active-tab="activeTab"
+      @tab-change="onTabChange" @refresh="refreshStats" @trigger="handleTrigger"
+    />
 
-      <main class="main-content">
-        <div v-if="activeTab === 'dashboard'" class="dashboard-grid">
-          <div class="col-side">
-            <KeywordManager :keywords="keywords" @refresh="refreshStats" />
-          </div>
-          <div class="col-main">
-            <HotTopicsFeed :refresh-key="refreshKey" />
-          </div>
-          <div class="col-side">
-            <NotificationPanel :refresh-key="refreshKey" @refresh="refreshStats" />
-          </div>
+    <main class="max-w-[1440px] mx-auto px-4 sm:px-6 pb-16 pt-6 relative z-10">
+      <!-- Dashboard 3-col -->
+      <div v-if="activeTab === 'dashboard'" class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        <div class="lg:col-span-3 lg:sticky lg:top-20 lg:self-start">
+          <KeywordManager :keywords="keywords" @refresh="refreshStats" />
         </div>
+        <div class="lg:col-span-6">
+          <HotTopicsFeed :refresh-key="refreshKey" />
+        </div>
+        <div class="lg:col-span-3 lg:sticky lg:top-20 lg:self-start">
+          <NotificationPanel :refresh-key="refreshKey" @refresh="refreshStats" />
+        </div>
+      </div>
 
-        <KeywordManager v-if="activeTab === 'keywords'" :keywords="keywords" @refresh="refreshStats" :full-width="true" />
-        <HotTopicsFeed v-if="activeTab === 'topics'" :full-width="true" :refresh-key="refreshKey" />
-        <NotificationPanel v-if="activeTab === 'notifications'" :refresh-key="refreshKey" @refresh="refreshStats" :full-width="true" />
-        <Settings v-if="activeTab === 'settings'" :full-width="true" />
-      </main>
-    </div>
-  </a-config-provider>
+      <KeywordManager v-if="activeTab === 'keywords'" :keywords="keywords" @refresh="refreshStats" full-width />
+      <HotTopicsFeed v-if="activeTab === 'topics'" :refresh-key="refreshKey" full-width />
+      <NotificationPanel v-if="activeTab === 'notifications'" :refresh-key="refreshKey" @refresh="refreshStats" full-width />
+      <SettingsPanel v-if="activeTab === 'settings'" full-width />
+    </main>
+  </div>
 </template>
 
 <script setup>
 import { ref, reactive, onMounted, onUnmounted } from 'vue'
-import { message } from 'ant-design-vue'
-import { theme } from 'ant-design-vue'
 import Header from './components/Header.vue'
 import KeywordManager from './components/KeywordManager.vue'
 import HotTopicsFeed from './components/HotTopicsFeed.vue'
 import NotificationPanel from './components/NotificationPanel.vue'
-import Settings from './components/Settings.vue'
+import SettingsPanel from './components/Settings.vue'
 import { api } from './lib/api'
 
 const activeTab = ref('dashboard')
@@ -51,95 +43,58 @@ const stats = reactive({ total: 0, verified: 0, fake: 0, today: 0 })
 const keywords = ref([])
 const notifyCount = ref(0)
 const refreshKey = ref(0)
+const pc = ref(null)
 
-const themeConfig = {
-  algorithm: theme.darkAlgorithm,
-  token: {
-    colorPrimary: '#00f0ff',
-    borderRadius: 8,
-    colorBgContainer: 'rgba(26,26,46,0.7)',
-    colorBgElevated: '#12121a',
-    colorText: '#e2e8f0',
-    colorTextSecondary: '#8892b0',
-    colorBorder: 'rgba(255,255,255,0.06)',
-  },
-}
-
-function onTabChange(tab) {
-  activeTab.value = tab
-}
+function onTabChange(tab) { activeTab.value = tab }
 
 async function refreshStats() {
   try {
     const [s, kw, n] = await Promise.all([
-      api.getTopicStats(),
-      api.getKeywords(),
-      api.getNotifications(true),
+      api.getTopicStats(), api.getKeywords(), api.getNotifications(true),
     ])
-    Object.assign(stats, s)
-    keywords.value = kw
-    notifyCount.value = n.unreadCount || 0
-  } catch (e) { /* silent */ }
+    Object.assign(stats, s); keywords.value = kw; notifyCount.value = n.unreadCount || 0
+  } catch (e) {}
 }
 
 async function handleTrigger() {
   try {
     await api.triggerMonitor()
-    message.success('监控已触发，正在搜集热点...')
     setTimeout(() => { refreshStats(); refreshKey.value++ }, 3000)
-  } catch (e) {
-    message.error('触发失败: ' + e.message)
-  }
+  } catch (e) {}
 }
 
-let timer
-onMounted(() => {
-  refreshStats()
-  timer = setInterval(refreshStats, 30000)
-})
-onUnmounted(() => clearInterval(timer))
+// Particles
+function initParticles() {
+  const c = pc.value; if (!c) return
+  const ctx = c.getContext('2d')
+  let ps = [], rid
+  function rs() { c.width = innerWidth; c.height = innerHeight }
+  rs(); addEventListener('resize', rs)
+  const n = Math.min(70, Math.floor(innerWidth / 18))
+  for (let i = 0; i < n; i++) ps.push({
+    x: Math.random()*c.width, y: Math.random()*c.height,
+    r: Math.random()*1+0.3, vx: (Math.random()-.5)*.12, vy: (Math.random()-.5)*.12,
+    a: Math.random()*.35+.08,
+  })
+  function dr() {
+    ctx.clearRect(0,0,c.width,c.height)
+    for (const p of ps) {
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2)
+      ctx.fillStyle = 'rgba(34,211,238,'+p.a+')'; ctx.fill()
+      p.x+=p.vx; p.y+=p.vy
+      if(p.x<0||p.x>c.width)p.vx*=-1
+      if(p.y<0||p.y>c.height)p.vy*=-1
+      for(const q of ps){const dx=p.x-q.x,dy=p.y-q.y,d=Math.sqrt(dx*dx+dy*dy)
+        if(d<100){ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y)
+        ctx.strokeStyle='rgba(34,211,238,'+(.035*(1-d/100))+')';ctx.lineWidth=.5;ctx.stroke()}}
+    }
+    rid=requestAnimationFrame(dr)
+  }
+  dr()
+  return ()=>{cancelAnimationFrame(rid);removeEventListener('resize',rs)}
+}
+
+let t, cp
+onMounted(()=>{refreshStats();t=setInterval(refreshStats,30000);cp=initParticles()})
+onUnmounted(()=>{clearInterval(t);if(cp)cp()})
 </script>
-
-<style scoped>
-.app-container {
-  min-height: 100vh;
-  position: relative;
-  overflow: hidden;
-}
-.glow-orb {
-  position: fixed;
-  border-radius: 50%;
-  filter: blur(80px);
-  pointer-events: none;
-  z-index: 0;
-}
-.glow-orb-left {
-  top: 80px; left: 40px;
-  width: 380px; height: 380px;
-  background: rgba(0,240,255,0.04);
-}
-.glow-orb-right {
-  bottom: 80px; right: 40px;
-  width: 320px; height: 320px;
-  background: rgba(255,0,255,0.04);
-}
-.main-content {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 16px 20px 48px;
-  position: relative;
-  z-index: 1;
-}
-.dashboard-grid {
-  display: grid;
-  grid-template-columns: 300px 1fr 300px;
-  gap: 16px;
-}
-@media (max-width: 1200px) {
-  .dashboard-grid {
-    grid-template-columns: 1fr;
-  }
-  .col-side { order: 2; }
-  .col-main { order: 1; }
-}
-</style>
